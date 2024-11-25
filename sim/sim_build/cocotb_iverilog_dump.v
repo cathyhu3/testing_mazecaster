@@ -1,6 +1,6 @@
 module cocotb_iverilog_dump();
 initial begin
-    $dumpfile("/Users/victoriahagenlocker/Documents/Documents - Victoria’s MacBook Air/GitHub/mazecaster_fpga/sim/sim_build/dda.fst");
-    $dumpvars(0, dda);
+    $dumpfile("/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim/sim_build/frame_buffer_testing.fst");
+    $dumpvars(0, frame_buffer_testing);
 end
 endmodule

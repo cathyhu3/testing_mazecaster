@@ -1,6 +1,12 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
+`ifdef SYNTHESIS
+`define FPATH(X) `"X`"
+`else /* ! SYNTHESIS */
+`define FPATH(X) `"../../data/X`"
+`endif  /* ! SYNTHESIS */
+
 /*
 TEST: loading an actual frame into the frame buffer to see if it'll actuall display onto the screen
 */

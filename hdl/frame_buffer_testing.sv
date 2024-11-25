@@ -81,7 +81,7 @@ module frame_buffer_testing #(
         .addra(address1),           // address
         .dina(ray_pixel_in),            // RAM input data = pixel_in from DDA_out buffer
         .clka(pixel_clk_in),        // Clock
-        .wea(!state),               // Write enabled when state == 0
+        .wea(0),               // Write enabled when state == 0
         .ena(1),   // RAM Enable = only enabled when we have a valid address (cannot read from invalid address)
         .rsta(rst_in),              // Output reset (does not affect memory contents)
         .regcea(1),             // Output register enabled when state == 1
@@ -98,7 +98,7 @@ module frame_buffer_testing #(
         .addra(address2),           // address
         .dina(ray_pixel_in),            // RAM input data = pixel_in from DDA_out buffer
         .clka(pixel_clk_in),        // Clock
-        .wea(state),                // Write enabled when state == 1
+        .wea(0),                // Write enabled when state == 1
         .ena(1),   // RAM Enable = only enabled when we have a valid address
         .rsta(rst_in),              // Output reset (does not affect memory contents)
         .regcea(1),            // Output register enabled when state == 0

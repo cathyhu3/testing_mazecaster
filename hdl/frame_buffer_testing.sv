@@ -40,9 +40,6 @@ module frame_buffer_testing #(
     logic [15:0] pixel_out1, pixel_out2;    // output 16-bit pixel representation from frame buffer
     logic [4:0] red1, red2, blue1, blue2; // (color)1 = pixel color from FB1, (color)2 = pixel color from FB2 (had to do separately so that there was no conflict in output wires)
     logic [5:0] green1, green2;
-    // logic [15:0] test_pixel_out1, test_pixel_out2;
-
-    logic valid_output_pixel;
 
     logic [15:0] address1, address2;
 
@@ -50,7 +47,6 @@ module frame_buffer_testing #(
     // state = 1: writing to FB2, reading from FB1 (pixel_out_1)
     assign address1 = (!state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2)); // if writing, address = ray_address_in. if reading, video sig indexing
     assign address2 = (state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2));
-    assign valid_output_pixel = (hcount_in < FULL_SCREEN_WIDTH && vcount_in < FULL_SCREEN_HEIGHT); // valid when hcount_in and vcount_in are in active draw
 
     assign red1 = pixel_out1[15:11];
     assign green1 = pixel_out1[10:5];
@@ -81,7 +77,7 @@ module frame_buffer_testing #(
         .addra(address1),           // address
         .dina(ray_pixel_in),            // RAM input data = pixel_in from DDA_out buffer
         .clka(pixel_clk_in),        // Clock
-        .wea(0),               // Write enabled when state == 0
+        .wea(),               // Write enabled when state == 0
         .ena(1),   // RAM Enable = only enabled when we have a valid address (cannot read from invalid address)
         .rsta(rst_in),              // Output reset (does not affect memory contents)
         .regcea(1),             // Output register enabled when state == 1
@@ -98,10 +94,10 @@ module frame_buffer_testing #(
         .addra(address2),           // address
         .dina(ray_pixel_in),            // RAM input data = pixel_in from DDA_out buffer
         .clka(pixel_clk_in),        // Clock
-        .wea(0),                // Write enabled when state == 1
-        .ena(1),   // RAM Enable = only enabled when we have a valid address
+        .wea(),                // Write enabled when state == 1
+        .ena(1),   // RAM Enable = always enabled
         .rsta(rst_in),              // Output reset (does not affect memory contents)
-        .regcea(1),            // Output register enabled when state == 0
+        .regcea(1),            // Output register always enabled
         .douta(pixel_out2)           // RAM output data, width determined from RAM_WIDTH
     );
 

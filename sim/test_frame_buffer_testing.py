@@ -38,14 +38,17 @@ async def test_a(dut):
     dut.rst_in.value = 1
     await ClockCycles(dut.pixel_clk_in,1)
     dut.rst_in.value = 0
-    for v in range(720):
-        for h in range(1280):
-            dut.hcount_in.value = h
-            dut.vcount_in.value = v
-            await ClockCycles(dut.pixel_clk_in, 1)
-    dut.video_last_pixel_in.value = 1
-    await ClockCycles(dut.pixel_clk_in, 1)
-    dut.video_last_pixel_in.value = 0
+    dut.ray_last_pixel_in.value = 1
+    await ClockCycles(dut.pixel_clk_in,1)
+    for _ in range(2):
+        for v in range(720):
+            for h in range(1280):
+                dut.hcount_in.value = h
+                dut.vcount_in.value = v
+                await ClockCycles(dut.pixel_clk_in, 1)
+        dut.video_last_pixel_in.value = 1
+        await ClockCycles(dut.pixel_clk_in, 1)
+        dut.video_last_pixel_in.value = 0
 
         # finish filling the ray casted pixel values into the frame buffer
         # while (ray_counter < 5*10):

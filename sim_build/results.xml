@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1732557713" />
+    <testcase name="test_a" classname="test_frame_buffer_testing" file="/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim/test_frame_buffer_testing.py" lineno="33" time="35.54396414756775" sim_time_ns="921604.001" ratio_time="25928.5654569586" />
+  </testsuite>
+</testsuites>

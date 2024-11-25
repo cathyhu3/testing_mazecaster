@@ -47,8 +47,8 @@ module frame_buffer_testing #(
     // state = 0: writing to FB1, reading from FB2 (pixel_out_2)
     // state = 1: writing to FB2, reading from FB1 (pixel_out_1)
     assign address1 = (!state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2)); // if writing, address = ray_address_in. if reading, video sig indexing
-    assign good_address = (hcount_in<1280)&&(vcount_in<720);
     assign address2 = (state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2));
+    assign good_address = (hcount_in<1280)&&(vcount_in<720);
 
     assign red1 = pixel_out1[15:11];
     assign green1 = pixel_out1[10:5];
@@ -145,14 +145,14 @@ module frame_buffer_testing #(
         end else begin
             switched <= 0;
             if (ray_last_pixel_in) begin
-                ready_to_switch[0] = 1;
+                ready_to_switch[0] <= 1;
                 if (video_last_pixel_in) begin // in case they are both true at the same time
-                    ready_to_switch[1] = 1;
+                    ready_to_switch[1] <= 1;
                 end
             end else if (video_last_pixel_in) begin
-                ready_to_switch[1] = 1;
+                ready_to_switch[1] <= 1;
                 if (ray_last_pixel_in) begin
-                    ready_to_switch[0] = 1;
+                    ready_to_switch[0] <= 1;
                 end
             end
         end

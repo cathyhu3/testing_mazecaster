@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.1 (lin64) Build 5076996 Wed May 22 18:36:09 MDT 2024
-| Date         : Mon Nov 25 15:25:33 2024
-| Host         : eecs-digital-09 running 64-bit Ubuntu 24.04.1 LTS
+| Date         : Mon Nov 25 15:34:37 2024
+| Host         : eecs-digital-12 running 64-bit Ubuntu 24.04.1 LTS
 | Command      : report_utilization -file obj/post_synth_util.rpt -hierarchical -hierarchical_depth 4
 | Design       : top_level
 | Device       : xc7s50csga324-1
@@ -22,20 +22,20 @@ Table of Contents
 +-----------------------------------+-------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
 |              Instance             |                Module               | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
 +-----------------------------------+-------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
-| top_level                         |                               (top) |        227 |        227 |       0 |    0 |  88 |     64 |      0 |          0 |
+| top_level                         |                               (top) |        216 |        216 |       0 |    0 |  88 |     64 |      0 |          0 |
 |   (top_level)                     |                               (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
 |   blue_ser                        |                     tmds_serializer |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
-|   frame_buffer_testing_module     |                frame_buffer_testing |        109 |        109 |       0 |    0 |   3 |     64 |      0 |          0 |
+|   frame_buffer_testing_module     |                frame_buffer_testing |        107 |        107 |       0 |    0 |   3 |     64 |      0 |          0 |
 |     (frame_buffer_testing_module) |                frame_buffer_testing |         11 |         11 |       0 |    0 |   3 |      0 |      0 |          0 |
-|     framebuffer_1                 |   xilinx_single_port_ram_read_first |         72 |         72 |       0 |    0 |   0 |     32 |      0 |          0 |
-|     framebuffer_2                 | xilinx_single_port_ram_read_first_4 |         26 |         26 |       0 |    0 |   0 |     32 |      0 |          0 |
+|     framebuffer_1                 |   xilinx_single_port_ram_read_first |         68 |         68 |       0 |    0 |   0 |     32 |      0 |          0 |
+|     framebuffer_2                 | xilinx_single_port_ram_read_first_4 |         28 |         28 |       0 |    0 |   0 |     32 |      0 |          0 |
 |   green_ser                       |                   tmds_serializer_0 |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
 |   mhdmicw                         |                   hdmi_clk_wiz_720p |          0 |          0 |       0 |    0 |   0 |      0 |      0 |          0 |
-|   mvg                             |                       video_sig_gen |         76 |         76 |       0 |    0 |  22 |      0 |      0 |          0 |
+|   mvg                             |                       video_sig_gen |         70 |         70 |       0 |    0 |  22 |      0 |      0 |          0 |
 |   red_ser                         |                   tmds_serializer_1 |          1 |          1 |       0 |    0 |   1 |      0 |      0 |          0 |
-|   tmds_blue                       |                        tmds_encoder |         13 |         13 |       0 |    0 |  21 |      0 |      0 |          0 |
+|   tmds_blue                       |                        tmds_encoder |         12 |         12 |       0 |    0 |  21 |      0 |      0 |          0 |
 |   tmds_green                      |                      tmds_encoder_2 |         13 |         13 |       0 |    0 |  21 |      0 |      0 |          0 |
-|   tmds_red                        |                      tmds_encoder_3 |         15 |         15 |       0 |    0 |  20 |      0 |      0 |          0 |
+|   tmds_red                        |                      tmds_encoder_3 |         13 |         13 |       0 |    0 |  20 |      0 |      0 |          0 |
 +-----------------------------------+-------------------------------------+------------+------------+---------+------+-----+--------+--------+------------+
 
 

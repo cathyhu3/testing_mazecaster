@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2024.1 (lin64) Build 5076996 Wed May 22 18:36:09 MDT 2024
-| Date             : Mon Nov 25 15:25:47 2024
-| Host             : eecs-digital-09 running 64-bit Ubuntu 24.04.1 LTS
+| Date             : Mon Nov 25 15:34:51 2024
+| Host             : eecs-digital-12 running 64-bit Ubuntu 24.04.1 LTS
 | Command          : report_power -file obj/post_route_power.rpt
 | Design           : top_level
 | Device           : xc7s50csga324-1
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.413        |
+| Total On-Chip Power (W)  | 0.415        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.338        |
+| Dynamic (W)              | 0.339        |
 | Device Static (W)        | 0.075        |
 | Effective TJA (C/W)      | 4.9          |
 | Max Ambient (C)          | 83.0         |
@@ -53,18 +53,18 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.004 |        6 |       --- |             --- |
-| Slice Logic    |    <0.001 |      424 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      211 |     32600 |            0.65 |
+| Slice Logic    |     0.001 |      414 |       --- |             --- |
+|   LUT as Logic |     0.001 |      204 |     32600 |            0.63 |
 |   Register     |    <0.001 |       88 |     65200 |            0.13 |
 |   BUFG         |    <0.001 |        1 |        32 |            3.13 |
 |   CARRY4       |    <0.001 |        6 |      8150 |            0.07 |
 |   Others       |     0.000 |       29 |       --- |             --- |
-| Signals        |     0.001 |      408 |       --- |             --- |
+| Signals        |     0.002 |      408 |       --- |             --- |
 | Block RAM      |     0.088 |       64 |        75 |           85.33 |
 | MMCM           |     0.105 |        1 |         5 |           20.00 |
-| I/O            |     0.139 |       32 |       210 |           15.24 |
+| I/O            |     0.140 |       32 |       210 |           15.24 |
 | Static Power   |     0.075 |          |           |                 |
-| Total          |     0.413 |          |           |                 |
+| Total          |     0.415 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -74,9 +74,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.100 |       0.089 |      0.012 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.101 |       0.090 |      0.012 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.071 |       0.058 |      0.013 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.042 |       0.041 |      0.001 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.043 |       0.042 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -144,11 +144,12 @@ Table of Contents
 +-------------------------------+-----------+
 | Name                          | Power (W) |
 +-------------------------------+-----------+
-| top_level                     |     0.338 |
+| top_level                     |     0.339 |
 |   frame_buffer_testing_module |     0.090 |
 |     framebuffer_1             |     0.045 |
 |     framebuffer_2             |     0.045 |
 |   mhdmicw                     |     0.105 |
+|   mvg                         |     0.001 |
 +-------------------------------+-----------+
 
 

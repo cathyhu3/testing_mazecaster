@@ -42,10 +42,12 @@ module frame_buffer_testing #(
     logic [5:0] green1, green2;
 
     logic [15:0] address1, address2;
+    logic good_address;
 
     // state = 0: writing to FB1, reading from FB2 (pixel_out_2)
     // state = 1: writing to FB2, reading from FB1 (pixel_out_1)
     assign address1 = (!state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2)); // if writing, address = ray_address_in. if reading, video sig indexing
+    assign good_address = (hcount_in<1280)&&(vcount_in<720);
     assign address2 = (state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2));
 
     assign red1 = pixel_out1[15:11];
@@ -60,19 +62,20 @@ module frame_buffer_testing #(
         if (rst_in) begin
             rgb_out = 0;
         end else if (state) begin // display from fb1
-            rgb_out = {{red1,3'b0}, {green1, 2'b0}, {blue1,3'b0}};
+            rgb_out = (good_address) ? {{red1,3'b0}, {green1, 2'b0}, {blue1,3'b0}} : 0;
             // test_pixel_out1 = {red1, green1, blue1};
         end else if (!state) begin
-            rgb_out = {{red2,3'b0}, {green2, 2'b0}, {blue2,3'b0}};
+            rgb_out = (good_address) ? {{red2,3'b0}, {green2, 2'b0}, {blue2,3'b0}}: 0;
             // test_pixel_out2 = {red2, green2, blue2};
         end
     end
     // FRAME BUFFER 1
     xilinx_single_port_ram_read_first #( // could have width be equal to PIXEL_WIDTH * height
     .RAM_WIDTH(PIXEL_WIDTH),                          // 16 bits wide (16 bit pixel representation)
-    .RAM_DEPTH(57600),                      // number of pixels = 320*180 = 57600 (log2(57600) = 15.814)
+    // .RAM_DEPTH(57600),                      // number of pixels = 320*180 = 57600 (log2(57600) = 15.814)
+    .RAM_DEPTH(65536),
     .RAM_PERFORMANCE("HIGH_PERFORMANCE"),   // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-    .INIT_FILE(`FPATH(popcat.mem))                            // name of RAM initialization file = pop_cat.mem
+    .INIT_FILE(`FPATH(cookies.mem))                            // name of RAM initialization file = pop_cat.mem
     ) framebuffer_1 (
         .addra(address1),           // address
         .dina(ray_pixel_in),            // RAM input data = pixel_in from DDA_out buffer
@@ -87,9 +90,10 @@ module frame_buffer_testing #(
     // FRAME BUFFER 2
     xilinx_single_port_ram_read_first #(
     .RAM_WIDTH(PIXEL_WIDTH),                          // 16 bits wide (16 bit pixel representation)
-    .RAM_DEPTH(57600),                      // number of pixels = 320*180 = 57600
+    // .RAM_DEPTH(57600),                      // number of pixels = 320*180 = 57600
+    .RAM_DEPTH(65536),                      // number of pixels = 320*180 = 57600
     .RAM_PERFORMANCE("HIGH_PERFORMANCE"),   // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-    .INIT_FILE(`FPATH(popcat.mem))                            // name of RAM initialization file = none
+    .INIT_FILE(`FPATH(cookies.mem))                            // name of RAM initialization file = none
     ) framebuffer_2 (
         .addra(address2),           // address
         .dina(ray_pixel_in),            // RAM input data = pixel_in from DDA_out buffer

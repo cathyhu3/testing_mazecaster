@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.1 (lin64) Build 5076996 Wed May 22 18:36:09 MDT 2024
-| Date         : Mon Nov 25 12:09:15 2024
-| Host         : eecs-digital-23 running 64-bit Ubuntu 24.04.1 LTS
+| Date         : Mon Nov 25 12:45:41 2024
+| Host         : eecs-digital-40 running 64-bit Ubuntu 24.04.1 LTS
 | Command      : report_timing -file obj/post_route_timing.rpt
 | Design       : top_level
 | Device       : 7s50-csga324
@@ -12,20 +12,20 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanc
 
 Timing Report
 
-Slack (MET) :             2.236ns  (required time - arrival time)
+Slack (MET) :             2.958ns  (required time - arrival time)
   Source:                 mvg/vcount_out_reg[2]/C
                             (rising edge-triggered cell FDRE clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
-  Destination:            frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_15/ADDRARDADDR[11]
+  Destination:            frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_13/ADDRARDADDR[15]
                             (rising edge-triggered cell RAMB36E1 clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
   Path Group:             clk_pixel_clk_wiz_0
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            13.468ns  (clk_pixel_clk_wiz_0 rise@13.468ns - clk_pixel_clk_wiz_0 rise@0.000ns)
-  Data Path Delay:        10.200ns  (logic 2.667ns (26.146%)  route 7.533ns (73.854%))
-  Logic Levels:           5  (CARRY4=3 LUT2=2)
-  Clock Path Skew:        -0.094ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    -1.546ns = ( 11.922 - 13.468 ) 
-    Source Clock Delay      (SCD):    -0.970ns
-    Clock Pessimism Removal (CPR):    0.482ns
+  Data Path Delay:        9.717ns  (logic 2.987ns (30.741%)  route 6.730ns (69.259%))
+  Logic Levels:           6  (CARRY4=4 LUT2=2)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.371ns = ( 12.097 - 13.468 ) 
+    Source Clock Delay      (SCD):    -0.975ns
+    Clock Pessimism Removal (CPR):    0.489ns
   Clock Uncertainty:      0.168ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Discrete Jitter          (DJ):    0.329ns
@@ -43,25 +43,28 @@ Slack (MET) :             2.236ns  (required time - arrival time)
                                                      -6.965    -4.291 r  mhdmicw/mmcm_adv_inst/CLKOUT0
                          net (fo=1, routed)           1.666    -2.625    mhdmicw/clk_pixel_clk_wiz_0
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096    -2.529 r  mhdmicw/clkout1_buf/O
-                         net (fo=163, routed)         1.559    -0.970    mvg/clk_pixel
-    SLICE_X44Y33         FDRE                                         r  mvg/vcount_out_reg[2]/C
+                         net (fo=138, routed)         1.554    -0.975    mvg/clk_pixel
+    SLICE_X42Y54         FDRE                                         r  mvg/vcount_out_reg[2]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X44Y33         FDRE (Prop_fdre_C_Q)         0.419    -0.551 r  mvg/vcount_out_reg[2]/Q
-                         net (fo=11, routed)          0.326    -0.225    frame_buffer_testing_module/BRAM_reg_0_0_i_22[0]
-    SLICE_X45Y34         LUT2 (Prop_lut2_I1_O)        0.299     0.074 r  frame_buffer_testing_module/BRAM_reg_0_0_i_32/O
-                         net (fo=1, routed)           0.000     0.074    mvg/S[0]
-    SLICE_X45Y34         CARRY4 (Prop_carry4_S[1]_O[2])
-                                                      0.580     0.654 r  mvg/BRAM_reg_0_0_i_23/O[2]
-                         net (fo=1, routed)           0.591     1.245    mvg/address11[9]
-    SLICE_X44Y34         CARRY4 (Prop_carry4_S[3]_CO[3])
-                                                      0.703     1.948 r  mvg/BRAM_reg_0_0_i_20/CO[3]
-                         net (fo=1, routed)           0.000     1.948    mvg/BRAM_reg_0_0_i_20_n_0
-    SLICE_X44Y35         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     2.282 r  mvg/BRAM_reg_0_0_i_19/O[1]
-                         net (fo=4, routed)           0.813     3.095    frame_buffer_testing_module/framebuffer_1/address10[5]
-    SLICE_X48Y35         LUT2 (Prop_lut2_I1_O)        0.332     3.427 r  frame_buffer_testing_module/framebuffer_1/BRAM_reg_0_0_i_5__0/O
-                         net (fo=20, routed)          5.804     9.231    frame_buffer_testing_module/framebuffer_1/address1[11]
-    RAMB36_X0Y15         RAMB36E1                                     r  frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_15/ADDRARDADDR[11]
+    SLICE_X42Y54         FDRE (Prop_fdre_C_Q)         0.478    -0.497 r  mvg/vcount_out_reg[2]/Q
+                         net (fo=12, routed)          0.498     0.001    frame_buffer_testing_module/BRAM_reg_0_0_i_21[0]
+    SLICE_X44Y54         LUT2 (Prop_lut2_I1_O)        0.295     0.296 r  frame_buffer_testing_module/BRAM_reg_0_0_i_31/O
+                         net (fo=1, routed)           0.000     0.296    mvg/S[0]
+    SLICE_X44Y54         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     0.846 r  mvg/BRAM_reg_0_0_i_22/CO[3]
+                         net (fo=1, routed)           0.000     0.846    mvg/BRAM_reg_0_0_i_22_n_0
+    SLICE_X44Y55         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     1.180 r  mvg/BRAM_reg_0_0_i_21/O[1]
+                         net (fo=1, routed)           0.588     1.768    mvg/address11[12]
+    SLICE_X43Y54         CARRY4 (Prop_carry4_S[2]_CO[3])
+                                                      0.701     2.469 r  mvg/BRAM_reg_0_0_i_18/CO[3]
+                         net (fo=1, routed)           0.000     2.469    mvg/BRAM_reg_0_0_i_18_n_0
+    SLICE_X43Y55         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     2.803 r  mvg/BRAM_reg_0_0_i_17/O[1]
+                         net (fo=4, routed)           0.585     3.388    frame_buffer_testing_module/framebuffer_1/address10[9]
+    SLICE_X46Y55         LUT2 (Prop_lut2_I1_O)        0.295     3.683 r  frame_buffer_testing_module/framebuffer_1/BRAM_reg_0_0_i_1__0/O
+                         net (fo=20, routed)          5.058     8.742    frame_buffer_testing_module/framebuffer_1/address1[15]
+    RAMB36_X0Y23         RAMB36E1                                     r  frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_13/ADDRARDADDR[15]
   -------------------------------------------------------------------    -------------------
 
                          (clock clk_pixel_clk_wiz_0 rise edge)
@@ -74,17 +77,17 @@ Slack (MET) :             2.236ns  (required time - arrival time)
                                                      -7.221     8.779 r  mhdmicw/mmcm_adv_inst/CLKOUT0
                          net (fo=1, routed)           1.587    10.366    mhdmicw/clk_pixel_clk_wiz_0
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    10.457 r  mhdmicw/clkout1_buf/O
-                         net (fo=163, routed)         1.465    11.922    frame_buffer_testing_module/framebuffer_1/clk_pixel
-    RAMB36_X0Y15         RAMB36E1                                     r  frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_15/CLKARDCLK
-                         clock pessimism              0.482    12.404    
-                         clock uncertainty           -0.168    12.236    
-    RAMB36_X0Y15         RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[11])
-                                                     -0.769    11.467    frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_15
+                         net (fo=138, routed)         1.640    12.097    frame_buffer_testing_module/framebuffer_1/clk_pixel
+    RAMB36_X0Y23         RAMB36E1                                     r  frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_13/CLKARDCLK
+                         clock pessimism              0.489    12.586    
+                         clock uncertainty           -0.168    12.418    
+    RAMB36_X0Y23         RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[15])
+                                                     -0.719    11.699    frame_buffer_testing_module/framebuffer_1/BRAM_reg_1_13
   -------------------------------------------------------------------
-                         required time                         11.467    
-                         arrival time                          -9.231    
+                         required time                         11.699    
+                         arrival time                          -8.742    
   -------------------------------------------------------------------
-                         slack                                  2.236    
+                         slack                                  2.958    
 
 
 

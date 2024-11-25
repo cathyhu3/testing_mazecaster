@@ -107,7 +107,7 @@ module frame_buffer_testing #(
 
 
     logic [1:0] ready_to_switch; // if == 2'b11, then we are ready to switch states
-    logic switched; // to indicate to combinational logic that we have switched states and ready_to_switch can go back to 2'b00
+    logic switched; // flag to indicate that we've switched
     /*
     ready_to_switch
     - collects ray_last_pixel_in and video_last_pixel_in signals
@@ -115,10 +115,35 @@ module frame_buffer_testing #(
         it signals to the sequential state logic that we are ready to switch states (switch the frame buffers)
         because one frame buffer is done loading all of its ray computed pixels, and the other is done displaying it to the screen
     */
-    always_comb begin
-        if (rst_in || switched) begin
-            ready_to_switch = 2'b0;
-        end else if (ray_last_pixel_in || video_last_pixel_in) begin
+    // always_comb begin
+    //     if (rst_in || switched) begin
+    //         ready_to_switch = 2'b0;
+    //     end else if (ray_last_pixel_in || video_last_pixel_in) begin
+    //         if (ray_last_pixel_in) begin
+    //             ready_to_switch[0] = 1;
+    //             if (video_last_pixel_in) begin // in case they are both true at the same time
+    //                 ready_to_switch[1] = 1;
+    //             end
+    //         end else if (video_last_pixel_in) begin
+    //             ready_to_switch[1] = 1;
+    //             if (ray_last_pixel_in) begin
+    //                 ready_to_switch[0] = 1;
+    //             end
+    //         end
+    //     end
+    // end
+
+    always_ff @(posedge pixel_clk_in) begin
+        if (rst_in) begin
+            state <= 0;
+            switched <= 0;
+            ready_to_switch <= 2'b00;
+        end else if (ready_to_switch == 2'b11) begin
+            state <= !state;
+            switched <= 1;
+            ready_to_switch <= 2'b00;
+        end else begin
+            switched <= 0;
             if (ray_last_pixel_in) begin
                 ready_to_switch[0] = 1;
                 if (video_last_pixel_in) begin // in case they are both true at the same time
@@ -129,24 +154,6 @@ module frame_buffer_testing #(
                 if (ray_last_pixel_in) begin
                     ready_to_switch[0] = 1;
                 end
-            end
-        end
-    end
-
-    // all state logic done here
-    always_ff @(posedge pixel_clk_in) begin
-        if (rst_in) begin
-            // rgb_out <= 0;
-            // pixel_out1 <= 0;
-            // pixel_out2 <= 0;
-            state <= 0;
-            switched <= 0;
-        end else begin
-            if (ready_to_switch == 2'b11) begin // if we are done displaying all of fb1 and writing to fb2
-                state <= !state;
-                switched <= 1;
-            end else begin
-                switched <= 0;
             end
         end
     end

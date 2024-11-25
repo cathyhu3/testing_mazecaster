@@ -46,7 +46,7 @@ module frame_buffer #(
     logic [5:0] green1, green2;
     // logic [15:0] test_pixel_out1, test_pixel_out2;
 
-    logic valid_output_pixel;
+    // logic valid_output_pixel;
 
     logic [15:0] address1, address2;
 
@@ -54,7 +54,7 @@ module frame_buffer #(
     // state = 1: writing to FB2, reading from FB1 (pixel_out_1)
     assign address1 = (!state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2)); // if writing, address = ray_address_in. if reading, video sig indexing
     assign address2 = (state) ? ray_address_in : (((hcount_in>>2)) + SCREEN_WIDTH*(vcount_in>>2));
-    assign valid_output_pixel = (hcount_in < FULL_SCREEN_WIDTH && vcount_in < FULL_SCREEN_HEIGHT); // valid when hcount_in and vcount_in are in active draw
+    // assign valid_output_pixel = (hcount_in < FULL_SCREEN_WIDTH && vcount_in < FULL_SCREEN_HEIGHT); // valid when hcount_in and vcount_in are in active draw
 
     assign red1 = pixel_out1[15:11];
     assign green1 = pixel_out1[10:5];
@@ -143,6 +143,7 @@ module frame_buffer #(
             // rgb_out <= 0;
             // pixel_out1 <= 0;
             // pixel_out2 <= 0;
+            // ready_to_switch <= 2'b0;
             state <= 0;
             switched <= 0;
         end else begin

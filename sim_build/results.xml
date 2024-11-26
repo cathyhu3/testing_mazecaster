@@ -1,6 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1732558652" />
-    <testcase name="test_a" classname="test_video_sig_gen" file="/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim/test_video_sig_gen.py" lineno="13" time="0.057908058166503906" sim_time_ns="20040.001" ratio_time="346065.8435891372" />
+    <property name="random_seed" value="1732593627" />
+    <testcase name="test_a" classname="test_fifo_to_flatten_to_frame_buffer" file="/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim/test_fifo_to_flatten_to_frame_buffer.py" lineno="27" time="34.92304706573486" sim_time_ns="1247468.001" ratio_time="35720.47990691989" />
   </testsuite>
 </testsuites>

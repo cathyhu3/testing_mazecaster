@@ -54,8 +54,8 @@ async def test_a(dut):
                 if (h%x == 0 and list_of_ray_addresses_left):
                     random_address = random.choice(list_of_ray_addresses_left)
                     list_of_ray_addresses_left.remove(random_address)
-                    dut.address_in.value = random_address # random address in range = [0, 320*180]
-                    dut.pixel_in.value = random.choice([i for i in range(2**16)]) # random pixel value in range = [0, 65535]
+                    dut.ray_address_in.value = random_address # random address in range = [0, 320*180]
+                    dut.ray_pixel_in.value = random.choice([i for i in range(2**16)]) # random pixel value in range = [0, 65535]
                     # ray_counter += 1
                 # if (v%4 == 0 and h%4 == 0):
                     # dut.address_in.value = (h//4)+(v//4)*10
@@ -71,8 +71,8 @@ async def test_a(dut):
             # ray_counter += 1
             random_address = random.choice(list_of_ray_addresses_left)
             list_of_ray_addresses_left.remove(random_address)
-            dut.address_in.value = random_address # random address in range = [0, 320*180]
-            dut.pixel_in.value = random.choice([i for i in range(2**16)]) # random pixel value in range = [0, 65535]
+            dut.ray_address_in.value = random_address # random address in range = [0, 320*180]
+            dut.ray_pixel_in.value = random.choice([i for i in range(2**16)]) # random pixel value in range = [0, 65535]
             # dut.address_in = random.choice([i for i in range(320*180)]) # random address in range = [0, 320*180]
             # dut.pixel_in = random.choice([i for i in range(2**16)]) # random pixel value in range = [0, 65535]
             await ClockCycles(dut.pixel_clk_in, 1)

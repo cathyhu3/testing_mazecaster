@@ -1,6 +1,6 @@
 module cocotb_iverilog_dump();
 initial begin
-    $dumpfile("/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim_build/video_sig_gen.fst");
-    $dumpvars(0, video_sig_gen);
+    $dumpfile("/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim_build/fifo_to_flatten_to_frame_buffer.fst");
+    $dumpvars(0, fifo_to_flatten_to_frame_buffer);
 end
 endmodule

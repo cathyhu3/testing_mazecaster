@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2024.1 (lin64) Build 5076996 Wed May 22 18:36:09 MDT 2024
-| Date             : Mon Nov 25 15:34:51 2024
-| Host             : eecs-digital-12 running 64-bit Ubuntu 24.04.1 LTS
+| Date             : Tue Nov 26 12:31:53 2024
+| Host             : eecs-digital-15 running 64-bit Ubuntu 24.04.1 LTS
 | Command          : report_power -file obj/post_route_power.rpt
 | Design           : top_level
 | Device           : xc7s50csga324-1
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.415        |
+| Total On-Chip Power (W)  | 0.425        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.339        |
-| Device Static (W)        | 0.075        |
+| Dynamic (W)              | 0.349        |
+| Device Static (W)        | 0.076        |
 | Effective TJA (C/W)      | 4.9          |
-| Max Ambient (C)          | 83.0         |
-| Junction Temperature (C) | 27.0         |
+| Max Ambient (C)          | 82.9         |
+| Junction Temperature (C) | 27.1         |
 | Confidence Level         | Medium       |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -53,18 +53,19 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.004 |        6 |       --- |             --- |
-| Slice Logic    |     0.001 |      414 |       --- |             --- |
-|   LUT as Logic |     0.001 |      204 |     32600 |            0.63 |
-|   Register     |    <0.001 |       88 |     65200 |            0.13 |
+| Slice Logic    |     0.002 |      623 |       --- |             --- |
+|   LUT as Logic |     0.002 |      284 |     32600 |            0.87 |
+|   Register     |    <0.001 |      141 |     65200 |            0.22 |
 |   BUFG         |    <0.001 |        1 |        32 |            3.13 |
-|   CARRY4       |    <0.001 |        6 |      8150 |            0.07 |
-|   Others       |     0.000 |       29 |       --- |             --- |
-| Signals        |     0.002 |      408 |       --- |             --- |
-| Block RAM      |     0.088 |       64 |        75 |           85.33 |
+|   CARRY4       |    <0.001 |       10 |      8150 |            0.12 |
+|   Others       |     0.000 |       39 |       --- |             --- |
+| Signals        |     0.003 |      604 |       --- |             --- |
+| Block RAM      |     0.094 |       65 |        75 |           86.67 |
 | MMCM           |     0.105 |        1 |         5 |           20.00 |
-| I/O            |     0.140 |       32 |       210 |           15.24 |
-| Static Power   |     0.075 |          |           |                 |
-| Total          |     0.415 |          |           |                 |
+| DSPs           |    <0.001 |        1 |       120 |            0.83 |
+| I/O            |     0.141 |       32 |       210 |           15.24 |
+| Static Power   |     0.076 |          |           |                 |
+| Total          |     0.425 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -74,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.101 |       0.090 |      0.012 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.110 |       0.098 |      0.012 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.071 |       0.058 |      0.013 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.043 |       0.042 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -141,15 +142,16 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+-------------------------------+-----------+
-| Name                          | Power (W) |
-+-------------------------------+-----------+
-| top_level                     |     0.339 |
-|   frame_buffer_testing_module |     0.090 |
-|     framebuffer_1             |     0.045 |
-|     framebuffer_2             |     0.045 |
-|   mhdmicw                     |     0.105 |
-|   mvg                         |     0.001 |
-+-------------------------------+-----------+
++-----------------------+-----------+
+| Name                  | Power (W) |
++-----------------------+-----------+
+| top_level             |     0.349 |
+|   flattening_module   |     0.002 |
+|   frame_buffer_module |     0.096 |
+|     framebuffer_1     |     0.048 |
+|     framebuffer_2     |     0.048 |
+|   mhdmicw             |     0.105 |
+|   mvg                 |     0.001 |
++-----------------------+-----------+
 
 

@@ -13,55 +13,29 @@ import random
 
 """
 Inputs:
-    input wire pixel_clk_in,
-    input wire rst_in,
-
-    // out of the fifo-out
-    input wire fifo_tvalid_out;
-    input wire [37:0] fifo_tdata_out;
-    input wire fifo_tlast_out;
-
-this should write to the frame buffer
+    input wire clk_pixel,                  //crystal reference clock
+    input wire [3:0] btn,                   // buttons for move control and rotation
+    input wire [15:0] sw,                   // switches
 """
 
 @cocotb.test()
 async def test_a(dut):
-    """cocotb test for fifo_to_flatten_to_frame_buffer"""
+    """cocotb test for top_level_cathy"""
     dut._log.info("Starting...")
-    cocotb.start_soon(Clock(dut.clk_pixel_in, 1, units="ns").start())
-    dut.rst_in.value = 1
-    await ClockCycles(dut.clk_pixel_in,1)
-    dut.rst_in.value = 0
+    cocotb.start_soon(Clock(dut.clk_pixel, 1, units="ns").start())
+    dut.sw[0].value = 1
+    await ClockCycles(dut.clk_pixel,1)
+    dut.sw[0].value = 0
+
+    # await ClockCycles(dut.clk_pixel,100000)
+    # await RisingEdge(dut.ray_last_pixel_out)
+    # await RisingEdge(dut.ray_last_pixel_out) 
+    await RisingEdge(dut.new_frame)
+    await RisingEdge(dut.new_frame)
+
+
+
     
-    for h in range(320):
-        line_height = int(h*(180/320))
-        wall_type = 1
-        map_data = 1
-        wallX = 200
-        dut.fifo_tdata_out.value = (h << 29) | (line_height << 21) | (wall_type << 20) | (map_data << 16) | wallX
-        dut.fifo_tvalid_out.value = 1
-        if (h == 319):
-            dut.fifo_tlast_out.value = 1
-        else:
-            dut.fifo_tlast_out.value = 0
-        await RisingEdge(dut.transformer_tready)
-        
-    await RisingEdge(dut.new_frame)
-
-    # for h in range(320):
-    #     line_height = int(h*(180/400) + 30)
-    #     wall_type = 1
-    #     map_data = 1
-    #     wallX = 200
-    #     dut.fifo_tdata_out.value = (h << 29) | (line_height << 21) | (wall_type << 20) | (map_data << 16) | wallX
-    #     dut.fifo_tvalid_out.value = 1
-    #     if (h == 319):
-    #         dut.fifo_tlast_out.value = 1
-    #     else:
-    #         dut.fifo_tlast_out.value = 0
-    #     await RisingEdge(dut.transformer_tready)
-
-    await RisingEdge(dut.new_frame)
 
 
 def is_runner():
@@ -70,7 +44,7 @@ def is_runner():
     sim = os.getenv("SIM", "icarus")
     proj_path = Path(__file__).resolve().parent.parent
     sys.path.append(str(proj_path / "sim" / "model"))
-    sources = [proj_path / "hdl" / "fifo_to_flatten_to_frame_buffer.sv"]
+    sources = [proj_path / "hdl" / "top_level_cathy.sv"]
     sources += [proj_path / "hdl" / "xilinx_single_port_ram_read_first.v"]
     sources += [proj_path / "hdl" / "video_sig_gen.sv"]
     sources += [proj_path / "hdl" / "dda_fifo_wrap.sv"]
@@ -86,7 +60,7 @@ def is_runner():
     runner = get_runner(sim)
     runner.build(
         sources=sources,
-        hdl_toplevel="fifo_to_flatten_to_frame_buffer",
+        hdl_toplevel="top_level_cathy",
         always=True,
         build_args=build_test_args,
         # parameters=parameters,
@@ -95,8 +69,8 @@ def is_runner():
     )
     run_test_args = []
     runner.test(
-        hdl_toplevel="fifo_to_flatten_to_frame_buffer",
-        test_module="test_fifo_to_flatten_to_frame_buffer",
+        hdl_toplevel="top_level_cathy",
+        test_module="test_top_level_cathy",
         test_args=run_test_args,
         waves=True
     )

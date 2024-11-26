@@ -61,8 +61,7 @@ async def test_a(dut):
             dut.fifo_tlast_out.value = 0
         await RisingEdge(dut.transformer_tready)
 
-
-    await ClockCycles(dut.clk_pixel_in, 40)
+    await RisingEdge(dut.new_frame)
 
 
 def is_runner():

@@ -4,11 +4,11 @@ module top_level(
     // input wire clk_100mhz,                  //crystal reference clock
     input wire clk_pixel,
     input wire [3:0] btn,                   // buttons for move control and rotation
-    input wire [15:0] sw                   // switches
-    input wire leftRot_btn;
-    input wire rightRot_btn;
-    input wire fwd_btn;
-    input wire bwd_btn;
+    input wire [15:0] sw,                   // switches
+    input wire leftRot_btn,
+    input wire rightRot_btn,
+    input wire fwd_btn,
+    input wire bwd_btn
     // input wire [15:0] sw,                   // switches
     // output logic [2:0]  rgb0,               // rgbs : need to drive them even if not using
     // output logic [2:0]  rgb1,
@@ -120,7 +120,7 @@ module top_level(
         .dirX(dirX),
         .dirY(dirY),
         .planeX(planeX), 
-        .planeY(planeY),
+        .planeY(planeY)
         .valid_out(1)
     );
 

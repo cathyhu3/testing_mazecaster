@@ -67,9 +67,9 @@ logic [15:0] tex_pixel;
 logic [1:0] tex_counter; // counts from 0 to 2
 logic tex_req; // 1 = valid request, 0 = no request
 
-textures texture_mod (
-    .pixel_clk_in(clk_pixel),
-    .rst_in(sys_rst),
+textures texture_module (
+    .pixel_clk_in(pixel_clk_in),
+    .rst_in(rst_in),
     .valid_req_in(tex_req),
     .wallX_in(wallX_in),
     .vcount_ray_in(vcount_ray),
@@ -85,22 +85,6 @@ always_comb begin
 
         FLATTENING: begin
             transformer_tready_out = 0; // not ready to receive new data
-
-            // ray pixel calculation
-            draw_start = HALF_SCREEN_HEIGHT - half_line_height;
-            draw_end = HALF_SCREEN_HEIGHT + half_line_height;
-            if ((vcount_ray >= draw_start) && (vcount_ray < draw_end)) begin
-                case (mapData_in) // based on map data
-                    0: ray_pixel_out = BACKGROUND_COLOR; ray_pixel_valid = 1;
-                    1: ray_pixel_out = WALL_COLOR;
-                    2: ray_pixel_out = 
-                endcase
-            end else begin // out of bounds
-                ray_pixel_out = BACKGROUND_COLOR;
-            end
-
-            // ray address calculation
-            ray_address_out = hcount_ray_in + vcount_ray*SCREEN_WIDTH;
         end
     endcase
 end
@@ -159,7 +143,7 @@ always_ff @(posedge pixel_clk_in) begin
                                 state <= FLATTENING;
                             end else if (tex_counter == 2) begin
                                 // method
-                                ray_last_pixel_out <= tex_pixel_out;
+                                ray_last_pixel_out <= tex_pixel;
                                 ray_address_out <= hcount_ray_in + vcount_ray*SCREEN_WIDTH;
                                 tex_counter <= 0;
                                 // state transitions

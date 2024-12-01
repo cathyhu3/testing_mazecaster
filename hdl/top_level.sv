@@ -7,7 +7,7 @@
 `define FPATH(X) `"../../data/X`"
 `endif  /* ! SYNTHESIS */
 
-module top_level_cathy(
+module top_level(
     input wire clk_100mhz,                  //crystal reference clock
     // input wire clk_pixel,
     // input wire [3:0] btn,                   // buttons for move control and rotation

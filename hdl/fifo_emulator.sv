@@ -14,14 +14,14 @@ module fifo_emulator #(
                         input wire sender_last_in,
                         input wire [DATA_WIDTH-1:0] sender_data_in,
                         // to sender from fifo (ready to receive data from sender)
-                        output wire fifo_ready_out,
+                        output logic fifo_ready_out,
 
                         // from receiver (receiver is ready)
                         input wire receiver_ready_in,
                         // to receiver (fifo data is valid)
-                        output wire receiver_valid_out,
-                        output wire [DATA_WIDTH-1:0] receiver_data_out,
-                        output wire receiver_last_out
+                        output logic receiver_valid_out,
+                        output logic [DATA_WIDTH-1:0] receiver_data_out,
+                        output logic receiver_last_out
                     );
     
     assign receiver_valid_out = 1;      // fifo data is always valid

@@ -48,6 +48,10 @@ module top_level(
     logic last_screen_pixel;
     logic [5:0] frame_count; //0 to 59 then rollover frame counter
 
+    logic [15:0] posX, posY;
+    logic [15:0] dirX, dirY;
+    logic [15:0] planeX, planeY;
+
     //CONTROL BUTTONS
 
     //debouncing buttons
@@ -103,33 +107,20 @@ module top_level(
 
     //TODO: INSERT CONTROLLER MODULE
 
-    logic [15:0] posX, posY;
-    logic [15:0] dirX, dirY;
-    logic [15:0] planeX, planeY;
+    assign posX = 16'b0000110000000000;
+    assign posY = 0;
+    assign dirX = 16'b0000000100000000;
+    assign dirY = 0;
+    assign planeX = 0;
+    assign planeY = 16'b0000000010101001;
 
-    controller controller_in (
-        .pixel_clk_in(clk_pixel),
-        .rst_in(sys_rst),
-        .moveFwd(fwd_btn),
-        .moveBack(bwd_btn),
-        .rotLeft(leftRot_btn),
-        .rotRight(rightRot_btn),
-        .valid_in(1),
-        .posX(posX),
-        .posY(posY),
-        .dirX(dirX),
-        .dirY(dirY),
-        .planeX(planeX), 
-        .planeY(planeY)
-        .valid_out(1)
-    );
 
     //TODO: INSERT RAY CALCULATION MODULE
 
     //TODO: sending in 320 hcounts
 
-    logic [8:0] hcount_in_ray;
-    logic [8:0] hcount_ray;
+    logic [8:0] hcount_ray_in;
+    logic [8:0] hcount_ray_out;
     logic stepX;
     logic stepY;
     logic signed [15:0] rayDirX;
@@ -142,19 +133,28 @@ module top_level(
     //generate all hcounts
     always_ff @(posedge clk_pixel) begin
         if (sys_rst) begin
-        hcount_in_ray <= 0;
+            hcount_ray_in <= 0;
         end else begin
-            hcount_in_ray <= hcount_in_ray + 1;
+            if (valid_ray_out && dda_data_ready_out) begin
+                if (hcount_ray_in == 319) begin
+                    hcount_ray_in <= 0;
+                end else begin 
+                    hcount_ray_in <= hcount_ray_in + 1;
+                end
+            end
         end
     end
 
 
-    logic dda_data_valid_in, dda_data_ready_out;
+    logic dda_data_ready_out;
+    logic valid_ray_out;
+    logic busy_ray_calc;
+
 
     ray_calculations calculating_ray (
         .pixel_clk_in(clk_pixel),
         .rst_in(sys_rst),
-        .hcount_in(hcount_in_ray),
+        .hcount_in(hcount_ray_in),
         .posX(posX),
         .posY(posY),
         .dirX(dirX),
@@ -169,12 +169,12 @@ module top_level(
         .sideDistY(sideDistY),
         .deltaDistX(deltaDistX),
         .deltaDistY(deltaDistY),
-        .hcount_out(hcount_ray),
-        .valid_ray_out(dda_data_valid_in),
-        .dda_data_ready_out(dda_data_ready_out)
+        // .hcount_out(hcount_ray),
+        .dda_data_ready_out(dda_data_ready_out),
+        .hcount_out(hcount_ray_out),
+        .busy_ray_calc(busy_ray_calc),
+        .valid_ray_out(valid_ray_out)
     );
-
-    // ADDED FOR TESTING ///////////////////////////////////////////////////
 
     //TODO: INSERT DDA-in FIFO
     logic dda_fsm_in_tvalid, dda_fsm_in_tready;
@@ -187,9 +187,9 @@ module top_level(
             .clk_pixel(clk_pixel),
             .rst_in(sys_rst),
 
-            .sender_valid_in(dda_data_valid_in),
+            .sender_valid_in(valid_ray_out),
             .sender_last_in(0),
-            .sender_data_in({5'b0_0000, hcount_ray, stepX, stepY, rayDirX, rayDirY, deltaDistX, deltaDistY, posX, posY, sideDistX, sideDistY}),
+            .sender_data_in({5'b0_0000, hcount_ray_out, stepX, stepY, rayDirX, rayDirY, deltaDistX, deltaDistY, posX, posY, sideDistX, sideDistY}),
             // to sender from fifo (ready to receive data from sender)
             .fifo_ready_out(dda_data_ready_out),
 
@@ -198,7 +198,7 @@ module top_level(
             // to receiver (fifo data is valid)
             .receiver_valid_out(dda_fsm_in_tvalid),
             .receiver_data_out(dda_fsm_in_tdata),
-            .receiver_last_out(dda_fsm_in_tlast)
+            .receiver_last_out()
         );
                     
 

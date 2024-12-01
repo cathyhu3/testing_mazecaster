@@ -27,8 +27,9 @@ async def test_a(dut):
     await ClockCycles(dut.clk_pixel,1)
     dut.sw[0].value = 0
 
-    await RisingEdge(dut.new_frame)
-    await RisingEdge(dut.new_frame)
+    await ClockCycles(dut.clk_pixel,100000)
+    # await RisingEdge(dut.new_frame)
+    # await RisingEdge(dut.new_frame)
 
 
 

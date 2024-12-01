@@ -8,37 +8,38 @@
 `endif  /* ! SYNTHESIS */
 
 module top_level_cathy(
-    input wire clk_100mhz,                  //crystal reference clock
-    // input wire clk_pixel,
+    // input wire clk_100mhz,                  //crystal reference clock
+    input wire clk_pixel,
     input wire [3:0] btn,                   // buttons for move control and rotation
-    input wire [15:0] sw,                   // switches
-    output logic [2:0] rgb0,               // rgbs : need to drive them even if not using
-    output logic [2:0] rgb1,
-    output logic [15:0] led,                //16 green output LEDs (located right above switches)
-    output logic [2:0] hdmi_tx_p,           //hdmi output signals (positives) (blue, green, red)
-    output logic [2:0] hdmi_tx_n,           //hdmi output signals (negatives) (blue, green, red)
-    output logic hdmi_clk_p, hdmi_clk_n     //differential hdmi clock
+    // input wire [15:0] sw,                   // switches
+    input wire [15:0] sw                   // switches
+    // output logic [2:0] rgb0,               // rgbs : need to drive them even if not using
+    // output logic [2:0] rgb1,
+    // output logic [15:0] led,                //16 green output LEDs (located right above switches)
+    // output logic [2:0] hdmi_tx_p,           //hdmi output signals (positives) (blue, green, red)
+    // output logic [2:0] hdmi_tx_n,           //hdmi output signals (negatives) (blue, green, red)
+    // output logic hdmi_clk_p, hdmi_clk_n     //differential hdmi clock
     );
 
     // shut up those RGBs
-    assign rgb0 = 0;
-    assign rgb1 = 0;
+    // assign rgb0 = 0;
+    // assign rgb1 = 0;
 
     // RESET SIGNAL
     logic sys_rst;
     assign sys_rst = sw[0];
 
-    // CLOCK
-    logic clk_pixel, clk_5x; //clock lines
-    logic locked; //locked signal (we'll leave unused but still hook it up)
+    // // CLOCK
+    // logic clk_pixel, clk_5x; //clock lines
+    // logic locked; //locked signal (we'll leave unused but still hook it up)
 
-    //clock manager...creates 74.25 Hz and 5 times 74.25 MHz for pixel and TMDS
-    hdmi_clk_wiz_720p mhdmicw (
-        .reset(0),
-        .locked(locked),
-        .clk_ref(clk_100mhz),
-        .clk_pixel(clk_pixel),
-        .clk_tmds(clk_5x));
+    // //clock manager...creates 74.25 Hz and 5 times 74.25 MHz for pixel and TMDS
+    // hdmi_clk_wiz_720p mhdmicw (
+    //     .reset(0),
+    //     .locked(locked),
+    //     .clk_ref(clk_100mhz),
+    //     .clk_pixel(clk_pixel),
+    //     .clk_tmds(clk_5x));
 
     // VIDEO SIGNAL GENERATION
     logic [10:0] hcount_video; //hcount of system!
@@ -341,60 +342,60 @@ module top_level_cathy(
     assign green_screen = rgb_out[15:8];  
     assign blue_screen = rgb_out[7:0];
 
-    logic [9:0] tmds_10b [0:2]; //output of each TMDS encoder! (an array of 3 elements that are 10 bits each)
-    logic tmds_signal [2:0]; //output of each TMDS serializer!
+    // logic [9:0] tmds_10b [0:2]; //output of each TMDS encoder! (an array of 3 elements that are 10 bits each)
+    // logic tmds_signal [2:0]; //output of each TMDS serializer!
 
-    // three tmds_encoders (blue, green, red)
-    tmds_encoder tmds_red(
-      .clk_in(clk_pixel),
-      .rst_in(sys_rst),
-      .data_in(red_screen),
-      .control_in(2'b0),
-      .ve_in(active_draw),
-      .tmds_out(tmds_10b[2]));
+    // // three tmds_encoders (blue, green, red)
+    // tmds_encoder tmds_red(
+    //   .clk_in(clk_pixel),
+    //   .rst_in(sys_rst),
+    //   .data_in(red_screen),
+    //   .control_in(2'b0),
+    //   .ve_in(active_draw),
+    //   .tmds_out(tmds_10b[2]));
 
-    tmds_encoder tmds_green(
-      .clk_in(clk_pixel),
-      .rst_in(sys_rst),
-      .data_in(green_screen),
-      .control_in(2'b0),
-      .ve_in(active_draw),
-      .tmds_out(tmds_10b[1]));
+    // tmds_encoder tmds_green(
+    //   .clk_in(clk_pixel),
+    //   .rst_in(sys_rst),
+    //   .data_in(green_screen),
+    //   .control_in(2'b0),
+    //   .ve_in(active_draw),
+    //   .tmds_out(tmds_10b[1]));
 
-    tmds_encoder tmds_blue(
-      .clk_in(clk_pixel),
-      .rst_in(sys_rst),
-      .data_in(blue_screen),
-      .control_in({vert_sync, hor_sync}),
-      .ve_in(active_draw),
-      .tmds_out(tmds_10b[0]));
+    // tmds_encoder tmds_blue(
+    //   .clk_in(clk_pixel),
+    //   .rst_in(sys_rst),
+    //   .data_in(blue_screen),
+    //   .control_in({vert_sync, hor_sync}),
+    //   .ve_in(active_draw),
+    //   .tmds_out(tmds_10b[0]));
 
-    // three tmds_serializers (blue, green, red):
-    tmds_serializer red_ser(
-        .clk_pixel_in(clk_pixel),
-        .clk_5x_in(clk_5x),
-        .rst_in(sys_rst),
-        .tmds_in(tmds_10b[2]),
-        .tmds_out(tmds_signal[2]));
+    // // three tmds_serializers (blue, green, red):
+    // tmds_serializer red_ser(
+    //     .clk_pixel_in(clk_pixel),
+    //     .clk_5x_in(clk_5x),
+    //     .rst_in(sys_rst),
+    //     .tmds_in(tmds_10b[2]),
+    //     .tmds_out(tmds_signal[2]));
 
-    tmds_serializer green_ser(
-        .clk_pixel_in(clk_pixel),
-        .clk_5x_in(clk_5x),
-        .rst_in(sys_rst),
-        .tmds_in(tmds_10b[1]),
-        .tmds_out(tmds_signal[1]));
+    // tmds_serializer green_ser(
+    //     .clk_pixel_in(clk_pixel),
+    //     .clk_5x_in(clk_5x),
+    //     .rst_in(sys_rst),
+    //     .tmds_in(tmds_10b[1]),
+    //     .tmds_out(tmds_signal[1]));
 
-    tmds_serializer blue_ser(
-        .clk_pixel_in(clk_pixel),
-        .clk_5x_in(clk_5x),
-        .rst_in(sys_rst),
-        .tmds_in(tmds_10b[0]),
-        .tmds_out(tmds_signal[0]));
+    // tmds_serializer blue_ser(
+    //     .clk_pixel_in(clk_pixel),
+    //     .clk_5x_in(clk_5x),
+    //     .rst_in(sys_rst),
+    //     .tmds_in(tmds_10b[0]),
+    //     .tmds_out(tmds_signal[0]));
 
-    OBUFDS OBUFDS_blue (.I(tmds_signal[0]), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
-    OBUFDS OBUFDS_green(.I(tmds_signal[1]), .O(hdmi_tx_p[1]), .OB(hdmi_tx_n[1]));
-    OBUFDS OBUFDS_red  (.I(tmds_signal[2]), .O(hdmi_tx_p[2]), .OB(hdmi_tx_n[2]));
-    OBUFDS OBUFDS_clock(.I(clk_pixel), .O(hdmi_clk_p), .OB(hdmi_clk_n));
+    // OBUFDS OBUFDS_blue (.I(tmds_signal[0]), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
+    // OBUFDS OBUFDS_green(.I(tmds_signal[1]), .O(hdmi_tx_p[1]), .OB(hdmi_tx_n[1]));
+    // OBUFDS OBUFDS_red  (.I(tmds_signal[2]), .O(hdmi_tx_p[2]), .OB(hdmi_tx_n[2]));
+    // OBUFDS OBUFDS_clock(.I(clk_pixel), .O(hdmi_clk_p), .OB(hdmi_clk_n));
 
 endmodule
 `default_nettype wire

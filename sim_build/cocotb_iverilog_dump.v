@@ -1,6 +1,6 @@
 module cocotb_iverilog_dump();
 initial begin
-    $dumpfile("/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim_build/top_level_cathy.fst");
-    $dumpvars(0, top_level_cathy);
+    $dumpfile("/Users/cathyhu/Documents/GitHub/testing_mazecaster/sim_build/textures.fst");
+    $dumpvars(0, textures);
 end
 endmodule

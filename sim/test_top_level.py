@@ -23,13 +23,14 @@ async def test_a(dut):
     """cocotb test for top_level"""
     dut._log.info("Starting...")
     cocotb.start_soon(Clock(dut.clk_pixel, 1, units="ns").start())
-    dut.sw[0].value = 1
+    dut.sys_rst.value = 1
     await ClockCycles(dut.clk_pixel,1)
-    dut.sw[0].value = 0
+    dut.sys_rst.value = 0
 
-    await ClockCycles(dut.clk_pixel,100000)
-    # await RisingEdge(dut.new_frame)
-    # await RisingEdge(dut.new_frame)
+    # await ClockCycles(dut.clk_pixel,100000)
+    await RisingEdge(dut.new_frame)
+    await RisingEdge(dut.new_frame)
+    await RisingEdge(dut.new_frame)
 
 
 

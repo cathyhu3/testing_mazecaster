@@ -8,37 +8,37 @@
 `endif  /* ! SYNTHESIS */
 
 module top_level(
-    input wire clk_100mhz,                  //crystal reference clock
-    // input wire clk_pixel,
+    // input wire clk_100mhz,                  //crystal reference clock
+    input wire clk_pixel,
     // input wire [3:0] btn,                   // buttons for move control and rotation
-    input wire [15:0] sw,                   // switches
-    // input wire [15:0] sw                   // switches
-    output logic [2:0] rgb0,               // rgbs : need to drive them even if not using
-    output logic [2:0] rgb1,
-    output logic [2:0] hdmi_tx_p,           //hdmi output signals (positives) (blue, green, red)
-    output logic [2:0] hdmi_tx_n,           //hdmi output signals (negatives) (blue, green, red)
-    output logic hdmi_clk_p, hdmi_clk_n     //differential hdmi clock
+    input wire sys_rst
+    // input wire [15:0] sw,                   // switches
+    // output logic [2:0] rgb0,               // rgbs : need to drive them even if not using
+    // output logic [2:0] rgb1,
+    // output logic [2:0] hdmi_tx_p,           //hdmi output signals (positives) (blue, green, red)
+    // output logic [2:0] hdmi_tx_n,           //hdmi output signals (negatives) (blue, green, red)
+    // output logic hdmi_clk_p, hdmi_clk_n     //differential hdmi clock
     );
 
     // shut up those RGBs
-    assign rgb0 = 0;
-    assign rgb1 = 0;
+    // assign rgb0 = 0;
+    // assign rgb1 = 0;
 
     // RESET SIGNAL
-    logic sys_rst;
-    assign sys_rst = sw[0];
+    // logic sys_rst;
+    // assign sys_rst = sw[0];
 
     // CLOCK
-    logic clk_pixel, clk_5x; //clock lines
-    logic locked; //locked signal (we'll leave unused but still hook it up)
+    // logic clk_pixel, clk_5x; //clock lines
+    // logic locked; //locked signal (we'll leave unused but still hook it up)
 
-    // clock manager...creates 74.25 Hz and 5 times 74.25 MHz for pixel and TMDS
-    hdmi_clk_wiz_720p mhdmicw (
-        .reset(0),
-        .locked(locked),
-        .clk_ref(clk_100mhz),
-        .clk_pixel(clk_pixel),
-        .clk_tmds(clk_5x));
+    // // clock manager...creates 74.25 Hz and 5 times 74.25 MHz for pixel and TMDS
+    // hdmi_clk_wiz_720p mhdmicw (
+    //     .reset(0),
+    //     .locked(locked),
+    //     .clk_ref(clk_100mhz),
+    //     .clk_pixel(clk_pixel),
+    //     .clk_tmds(clk_5x));
 
     // VIDEO SIGNAL GENERATION
     logic [10:0] hcount_video; //hcount of system!
@@ -227,16 +227,18 @@ module top_level(
 
 
     // //TODO: INSERT DDA-out FIFO
-    // //receiver
-    // logic dda_fsm_out_tready, dda_fsm_out_tvalid, dda_fsm_out_tlast;
-    // logic [37:0] dda_fsm_out_tdata;
-    // // fifo-out signal to transformer
-    // logic fifo_tvalid_out;
-    // logic [39:0] fifo_tdata_out;
-    // logic fifo_tlast_out;
-    // logic fifo_prog_empty;
-    // // transformer signal to fifo-out
-    // logic transformer_tready;
+    //receiver
+    logic dda_fsm_out_tready, dda_fsm_out_tvalid, dda_fsm_out_tlast;
+    logic [37:0] dda_fsm_out_tdata;
+    // fifo-out signal to transformer
+    logic fifo_tvalid_out;
+    logic [39:0] fifo_tdata_out;
+    logic fifo_tlast_out;
+    logic fifo_prog_empty;
+    // transformer signal to fifo-out
+    logic transformer_tready;
+
+    // logic [10:0] fill_fifo_counter;
 
     // dda_fifo_wrap #(
     //     .DEPTH(256), //2^8 = 256 - ~320
@@ -257,26 +259,65 @@ module top_level(
     //     .receiver_axis_tlast(fifo_tlast_out),
     //     .receiver_axis_prog_empty()); // unused
 
+    // logic [2:0] bram_counter;
+
+    // always_ff @(posedge clk_pixel) begin
+    //     if (sys_rst) begin
+    //     end else if (dda_fsm_out_tready) begin
+    //         if (fill_fifo_counter < 320) begin
+    //             if (bram_counter > 1) begin
+    //                 bram_counter <= 0;
+    //                 dda_fsm_out_tvalid <= 1;
+    //                 dda_fsm_out_tdata <= fifo_data_out_full[37:0];
+    //                 fill_fifo_counter <= fill_fifo_counter + 1;
+    //                 dda_fsm_out_tlast <= (fill_fifo_counter == 319);
+    //             end else begin
+    //                 bram_counter <= bram_counter + 1;
+    //             end
+    //         end
+    //     end else begin
+    //         fill_fifo_counter <= 0;
+    //     end
+    // end
+
+
+    // logic fifo_tvalid_out;
+    // logic [39:0] fifo_tdata_out;
+    // logic fifo_tlast_out;
+    // // // transformer signal to fifo-out
+    // logic transformer_tready;
+
     // ADDED FOR TESTING ///////////////////////////////////////////////////
+    logic [3:0] counter;
     logic [9:0] hcount_ray;
 
-    logic fifo_tvalid_out;
-    logic [39:0] fifo_tdata_out;
-    logic fifo_tlast_out;
-    // // transformer signal to fifo-out
-    logic transformer_tready;
-
     assign fifo_tlast_out = (hcount_ray == 319);
-    assign fifo_tvalid_out = 1;
+    logic [1:0] fifo_valid_pipe;
+    assign fifo_tvalid_out = fifo_valid_pipe[1];
+
+    // ADDED FOR TESTING ////////////////////
+    logic trans_tready_past;
+    // pipeline to signal 2 cycle wait for bram valid output
+    always_ff @(posedge clk_pixel) begin
+        if (sys_rst) begin
+            trans_tready_past <= 0;
+            fifo_valid_pipe <= 2'b0;
+        end else begin
+            trans_tready_past <= transformer_tready;
+            fifo_valid_pipe[0] <= (transformer_tready && !trans_tready_past); // only high at rising edge of tready
+            fifo_valid_pipe[1] <= fifo_valid_pipe[0];
+        end
+    end
+    /////////////////////////////////////////
 
     always_ff @(posedge clk_pixel) begin
         if (sys_rst) begin
             hcount_ray <= 0;
-        end else if (hcount_ray == 319) begin
-            if (new_frame) begin
+        end else if (hcount_ray == 319) begin // pause writing until we hit a new frame
+            if (last_screen_pixel) begin
                 hcount_ray <= 0;
             end
-        end else if (transformer_tready) begin // ready and valid handshake
+        end else if (fifo_tvalid_out) begin // ready and valid handshake (if t_ready valid for 2 cycles)
             hcount_ray <= hcount_ray + 1;
         end
     end
@@ -284,10 +325,10 @@ module top_level(
     logic [39:0] fifo_data_out_full;
 
     xilinx_single_port_ram_read_first #(
-    .RAM_WIDTH(40),                          // 16 bits wide (16 bit pixel representation)
+    .RAM_WIDTH(40),                          
     .RAM_DEPTH(320),                        // number of hcounts = 320
     .RAM_PERFORMANCE("HIGH_PERFORMANCE"),   // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-    .INIT_FILE(`FPATH(fifo_tdata_tex1.mem))                            // name of RAM initialization file = none
+    .INIT_FILE(`FPATH(fifo_tdata.mem))                            // name of RAM initialization file = none
     ) dda_out_fifo_emulator (
         .addra(hcount_ray),           // address
         .dina(),                    // RAM input data = pixel_in from DDA_out buffer
@@ -307,13 +348,15 @@ module top_level(
     logic [15:0] ray_address_out;
     logic [15:0] ray_pixel_out;
     logic ray_last_pixel_out;
+    logic [1:0] frame_buff_ready;
 
-    transformation_tex flattening_module (
+    transformation flattening_module (
         .pixel_clk_in(clk_pixel),
         .rst_in(sys_rst),
         .dda_fifo_tvalid_in(fifo_tvalid_out),
         .dda_fifo_tdata_in(fifo_tdata_out[37:0]),
         .dda_fifo_tlast_in(fifo_tlast_out),
+        .fb_ready_to_switch_in(frame_buff_ready),
         .transformer_tready_out(transformer_tready), // ready for new data
         .ray_address_out(ray_address_out),
         .ray_pixel_out(ray_pixel_out),
@@ -332,6 +375,7 @@ module top_level(
         .ray_pixel_in(ray_pixel_out),
         .ray_last_pixel_in(ray_last_pixel_out),
         .video_last_pixel_in(last_screen_pixel),
+        .fb_ready_to_switch_out(frame_buff_ready),
         .rgb_out(rgb_out) // should I create a valid signal so that 
     );
 
@@ -341,60 +385,60 @@ module top_level(
     assign green_screen = rgb_out[15:8];  
     assign blue_screen = rgb_out[7:0];
 
-    logic [9:0] tmds_10b [0:2]; //output of each TMDS encoder! (an array of 3 elements that are 10 bits each)
-    logic tmds_signal [2:0]; //output of each TMDS serializer!
+    // logic [9:0] tmds_10b [0:2]; //output of each TMDS encoder! (an array of 3 elements that are 10 bits each)
+    // logic tmds_signal [2:0]; //output of each TMDS serializer!
 
-    // three tmds_encoders (blue, green, red)
-    tmds_encoder tmds_red(
-      .clk_in(clk_pixel),
-      .rst_in(sys_rst),
-      .data_in(red_screen),
-      .control_in(2'b0),
-      .ve_in(active_draw),
-      .tmds_out(tmds_10b[2]));
+    // // three tmds_encoders (blue, green, red)
+    // tmds_encoder tmds_red(
+    //   .clk_in(clk_pixel),
+    //   .rst_in(sys_rst),
+    //   .data_in(red_screen),
+    //   .control_in(2'b0),
+    //   .ve_in(active_draw),
+    //   .tmds_out(tmds_10b[2]));
 
-    tmds_encoder tmds_green(
-      .clk_in(clk_pixel),
-      .rst_in(sys_rst),
-      .data_in(green_screen),
-      .control_in(2'b0),
-      .ve_in(active_draw),
-      .tmds_out(tmds_10b[1]));
+    // tmds_encoder tmds_green(
+    //   .clk_in(clk_pixel),
+    //   .rst_in(sys_rst),
+    //   .data_in(green_screen),
+    //   .control_in(2'b0),
+    //   .ve_in(active_draw),
+    //   .tmds_out(tmds_10b[1]));
 
-    tmds_encoder tmds_blue(
-      .clk_in(clk_pixel),
-      .rst_in(sys_rst),
-      .data_in(blue_screen),
-      .control_in({vert_sync, hor_sync}),
-      .ve_in(active_draw),
-      .tmds_out(tmds_10b[0]));
+    // tmds_encoder tmds_blue(
+    //   .clk_in(clk_pixel),
+    //   .rst_in(sys_rst),
+    //   .data_in(blue_screen),
+    //   .control_in({vert_sync, hor_sync}),
+    //   .ve_in(active_draw),
+    //   .tmds_out(tmds_10b[0]));
 
-    // three tmds_serializers (blue, green, red):
-    tmds_serializer red_ser(
-        .clk_pixel_in(clk_pixel),
-        .clk_5x_in(clk_5x),
-        .rst_in(sys_rst),
-        .tmds_in(tmds_10b[2]),
-        .tmds_out(tmds_signal[2]));
+    // // three tmds_serializers (blue, green, red):
+    // tmds_serializer red_ser(
+    //     .clk_pixel_in(clk_pixel),
+    //     .clk_5x_in(clk_5x),
+    //     .rst_in(sys_rst),
+    //     .tmds_in(tmds_10b[2]),
+    //     .tmds_out(tmds_signal[2]));
 
-    tmds_serializer green_ser(
-        .clk_pixel_in(clk_pixel),
-        .clk_5x_in(clk_5x),
-        .rst_in(sys_rst),
-        .tmds_in(tmds_10b[1]),
-        .tmds_out(tmds_signal[1]));
+    // tmds_serializer green_ser(
+    //     .clk_pixel_in(clk_pixel),
+    //     .clk_5x_in(clk_5x),
+    //     .rst_in(sys_rst),
+    //     .tmds_in(tmds_10b[1]),
+    //     .tmds_out(tmds_signal[1]));
 
-    tmds_serializer blue_ser(
-        .clk_pixel_in(clk_pixel),
-        .clk_5x_in(clk_5x),
-        .rst_in(sys_rst),
-        .tmds_in(tmds_10b[0]),
-        .tmds_out(tmds_signal[0]));
+    // tmds_serializer blue_ser(
+    //     .clk_pixel_in(clk_pixel),
+    //     .clk_5x_in(clk_5x),
+    //     .rst_in(sys_rst),
+    //     .tmds_in(tmds_10b[0]),
+    //     .tmds_out(tmds_signal[0]));
 
-    OBUFDS OBUFDS_blue (.I(tmds_signal[0]), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
-    OBUFDS OBUFDS_green(.I(tmds_signal[1]), .O(hdmi_tx_p[1]), .OB(hdmi_tx_n[1]));
-    OBUFDS OBUFDS_red  (.I(tmds_signal[2]), .O(hdmi_tx_p[2]), .OB(hdmi_tx_n[2]));
-    OBUFDS OBUFDS_clock(.I(clk_pixel), .O(hdmi_clk_p), .OB(hdmi_clk_n));
+    // OBUFDS OBUFDS_blue (.I(tmds_signal[0]), .O(hdmi_tx_p[0]), .OB(hdmi_tx_n[0]));
+    // OBUFDS OBUFDS_green(.I(tmds_signal[1]), .O(hdmi_tx_p[1]), .OB(hdmi_tx_n[1]));
+    // OBUFDS OBUFDS_red  (.I(tmds_signal[2]), .O(hdmi_tx_p[2]), .OB(hdmi_tx_n[2]));
+    // OBUFDS OBUFDS_clock(.I(clk_pixel), .O(hdmi_clk_p), .OB(hdmi_clk_n));
 
 endmodule
 `default_nettype wire

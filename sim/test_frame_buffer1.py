@@ -38,7 +38,7 @@ async def test_a(dut):
     dut.rst_in.value = 1
     await ClockCycles(dut.pixel_clk_in,1)
     dut.rst_in.value = 0
-    for _ in range(2): # repeat two times
+    for _ in range(4): # repeat two times
         video_counter = 0
         ray_counter = 0
         list_of_ray_addresses_left = [i for i in range(5*10)]
@@ -77,6 +77,7 @@ async def test_a(dut):
             # dut.pixel_in = random.choice([i for i in range(2**16)]) # random pixel value in range = [0, 65535]
             await ClockCycles(dut.pixel_clk_in, 1)
 
+        await ClockCycles(dut.pixel_clk_in, 5)
         # ray_last_pixel_in: one cycle high to indicate we're done filling the frame buffer with freshly calculated values
         dut.ray_last_pixel_in.value = 1
         await ClockCycles(dut.pixel_clk_in, 1)

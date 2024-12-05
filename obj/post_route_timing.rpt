@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.1 (lin64) Build 5076996 Wed May 22 18:36:09 MDT 2024
-| Date         : Sat Nov 30 23:49:39 2024
-| Host         : eecs-digital-33 running 64-bit Ubuntu 24.04.1 LTS
+| Date         : Mon Dec  2 18:09:06 2024
+| Host         : eecs-digital-28 running 64-bit Ubuntu 24.04.1 LTS
 | Command      : report_timing -file obj/post_route_timing.rpt
 | Design       : top_level
 | Device       : 7s50-csga324
@@ -12,19 +12,19 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanc
 
 Timing Report
 
-Slack (MET) :             2.752ns  (required time - arrival time)
-  Source:                 mvg/vcount_out_reg[3]/C
+Slack (MET) :             2.674ns  (required time - arrival time)
+  Source:                 mvg/vcount_out_reg[2]/C
                             (rising edge-triggered cell FDRE clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
-  Destination:            frame_buffer_module/framebuffer_1/BRAM_reg_1_14/ADDRARDADDR[8]
+  Destination:            frame_buffer_module/framebuffer_1/BRAM_reg_1_1/ADDRARDADDR[13]
                             (rising edge-triggered cell RAMB36E1 clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
   Path Group:             clk_pixel_clk_wiz_0
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            13.468ns  (clk_pixel_clk_wiz_0 rise@13.468ns - clk_pixel_clk_wiz_0 rise@0.000ns)
-  Data Path Delay:        9.625ns  (logic 2.002ns (20.801%)  route 7.623ns (79.199%))
-  Logic Levels:           4  (CARRY4=2 LUT2=1 LUT3=1)
-  Clock Path Skew:        -0.149ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    -1.534ns = ( 11.934 - 13.468 ) 
-    Source Clock Delay      (SCD):    -0.903ns
+  Data Path Delay:        9.949ns  (logic 2.703ns (27.168%)  route 7.246ns (72.832%))
+  Logic Levels:           5  (CARRY4=3 LUT2=1 LUT3=1)
+  Clock Path Skew:        0.094ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.360ns = ( 12.108 - 13.468 ) 
+    Source Clock Delay      (SCD):    -0.972ns
     Clock Pessimism Removal (CPR):    0.482ns
   Clock Uncertainty:      0.168ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
@@ -43,22 +43,25 @@ Slack (MET) :             2.752ns  (required time - arrival time)
                                                      -6.965    -4.291 r  mhdmicw/mmcm_adv_inst/CLKOUT0
                          net (fo=1, routed)           1.666    -2.625    mhdmicw/clk_pixel_clk_wiz_0
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096    -2.529 r  mhdmicw/clkout1_buf/O
-                         net (fo=190, routed)         1.626    -0.903    mvg/clk_pixel
-    SLICE_X5Y17          FDRE                                         r  mvg/vcount_out_reg[3]/C
+                         net (fo=182, routed)         1.557    -0.972    mvg/clk_pixel
+    SLICE_X15Y19         FDRE                                         r  mvg/vcount_out_reg[2]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X5Y17          FDRE (Prop_fdre_C_Q)         0.456    -0.447 r  mvg/vcount_out_reg[3]/Q
-                         net (fo=13, routed)          0.691     0.244    mvg/Q[1]
-    SLICE_X6Y18          CARRY4 (Prop_carry4_S[0]_O[0])
-                                                      0.376     0.620 r  mvg/BRAM_reg_0_0_i_23/O[0]
-                         net (fo=1, routed)           0.484     1.104    frame_buffer_module/O[0]
-    SLICE_X7Y18          LUT2 (Prop_lut2_I1_O)        0.295     1.399 r  frame_buffer_module/BRAM_reg_0_0_i_25/O
-                         net (fo=1, routed)           0.000     1.399    mvg/BRAM_reg_0_0[1]
-    SLICE_X7Y18          CARRY4 (Prop_carry4_S[1]_O[2])
-                                                      0.580     1.979 r  mvg/BRAM_reg_0_0_i_20/O[2]
-                         net (fo=4, routed)           0.789     2.768    mvg/address10[2]
-    SLICE_X9Y19          LUT3 (Prop_lut3_I0_O)        0.295     3.063 r  mvg/BRAM_reg_0_0_i_8__0/O
-                         net (fo=20, routed)          5.660     8.722    frame_buffer_module/framebuffer_1/ADDRARDADDR[8]
-    RAMB36_X2Y17         RAMB36E1                                     r  frame_buffer_module/framebuffer_1/BRAM_reg_1_14/ADDRARDADDR[8]
+    SLICE_X15Y19         FDRE (Prop_fdre_C_Q)         0.419    -0.553 r  mvg/vcount_out_reg[2]/Q
+                         net (fo=12, routed)          0.803     0.251    frame_buffer_module/Q[0]
+    SLICE_X8Y19          LUT2 (Prop_lut2_I1_O)        0.299     0.550 r  frame_buffer_module/BRAM_reg_0_0_i_32/O
+                         net (fo=1, routed)           0.000     0.550    mvg/S[0]
+    SLICE_X8Y19          CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     1.083 r  mvg/BRAM_reg_0_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000     1.083    mvg/BRAM_reg_0_0_i_23_n_1
+    SLICE_X8Y20          CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219     1.302 r  mvg/BRAM_reg_0_0_i_22/O[0]
+                         net (fo=1, routed)           0.589     1.890    mvg/frame_buffer_module/address11[11]
+    SLICE_X9Y20          CARRY4 (Prop_carry4_S[1]_O[3])
+                                                      0.935     2.825 r  mvg/BRAM_reg_0_0_i_19/O[3]
+                         net (fo=4, routed)           0.570     3.395    mvg/address10[7]
+    SLICE_X8Y23          LUT3 (Prop_lut3_I0_O)        0.298     3.693 r  mvg/BRAM_reg_0_0_i_3__0/O
+                         net (fo=20, routed)          5.285     8.978    frame_buffer_module/framebuffer_1/ADDRARDADDR[13]
+    RAMB36_X0Y28         RAMB36E1                                     r  frame_buffer_module/framebuffer_1/BRAM_reg_1_1/ADDRARDADDR[13]
   -------------------------------------------------------------------    -------------------
 
                          (clock clk_pixel_clk_wiz_0 rise edge)
@@ -71,17 +74,17 @@ Slack (MET) :             2.752ns  (required time - arrival time)
                                                      -7.221     8.779 r  mhdmicw/mmcm_adv_inst/CLKOUT0
                          net (fo=1, routed)           1.587    10.366    mhdmicw/clk_pixel_clk_wiz_0
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    10.457 r  mhdmicw/clkout1_buf/O
-                         net (fo=190, routed)         1.477    11.934    frame_buffer_module/framebuffer_1/clk_pixel
-    RAMB36_X2Y17         RAMB36E1                                     r  frame_buffer_module/framebuffer_1/BRAM_reg_1_14/CLKARDCLK
-                         clock pessimism              0.482    12.416    
-                         clock uncertainty           -0.168    12.248    
-    RAMB36_X2Y17         RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[8])
-                                                     -0.774    11.474    frame_buffer_module/framebuffer_1/BRAM_reg_1_14
+                         net (fo=182, routed)         1.651    12.108    frame_buffer_module/framebuffer_1/clk_pixel
+    RAMB36_X0Y28         RAMB36E1                                     r  frame_buffer_module/framebuffer_1/BRAM_reg_1_1/CLKARDCLK
+                         clock pessimism              0.482    12.590    
+                         clock uncertainty           -0.168    12.422    
+    RAMB36_X0Y28         RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[13])
+                                                     -0.770    11.652    frame_buffer_module/framebuffer_1/BRAM_reg_1_1
   -------------------------------------------------------------------
-                         required time                         11.474    
-                         arrival time                          -8.722    
+                         required time                         11.652    
+                         arrival time                          -8.978    
   -------------------------------------------------------------------
-                         slack                                  2.752    
+                         slack                                  2.674    
 
 
 

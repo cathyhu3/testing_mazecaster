@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2024.1 (lin64) Build 5076996 Wed May 22 18:36:09 MDT 2024
-| Date             : Sat Nov 30 23:49:39 2024
-| Host             : eecs-digital-33 running 64-bit Ubuntu 24.04.1 LTS
+| Date             : Mon Dec  2 18:09:07 2024
+| Host             : eecs-digital-28 running 64-bit Ubuntu 24.04.1 LTS
 | Command          : report_power -file obj/post_route_power.rpt
 | Design           : top_level
 | Device           : xc7s50csga324-1
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.424        |
+| Total On-Chip Power (W)  | 0.423        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.349        |
+| Dynamic (W)              | 0.348        |
 | Device Static (W)        | 0.076        |
 | Effective TJA (C/W)      | 4.9          |
 | Max Ambient (C)          | 82.9         |
@@ -53,18 +53,19 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.004 |        6 |       --- |             --- |
-| Slice Logic    |     0.001 |      583 |       --- |             --- |
-|   LUT as Logic |     0.001 |      271 |     32600 |            0.83 |
-|   Register     |    <0.001 |      136 |     65200 |            0.21 |
-|   CARRY4       |    <0.001 |       12 |      8150 |            0.15 |
+| Slice Logic    |     0.001 |      623 |       --- |             --- |
+|   LUT as Logic |     0.001 |      288 |     32600 |            0.88 |
+|   Register     |    <0.001 |      146 |     65200 |            0.22 |
+|   CARRY4       |    <0.001 |       10 |      8150 |            0.12 |
 |   BUFG         |    <0.001 |        1 |        32 |            3.13 |
-|   Others       |     0.000 |       36 |       --- |             --- |
-| Signals        |     0.004 |      557 |       --- |             --- |
+|   Others       |     0.000 |       39 |       --- |             --- |
+| Signals        |     0.002 |      601 |       --- |             --- |
 | Block RAM      |     0.094 |       65 |        75 |           86.67 |
 | MMCM           |     0.105 |        1 |         5 |           20.00 |
-| I/O            |     0.141 |       16 |       210 |            7.62 |
+| DSPs           |    <0.001 |        1 |       120 |            0.83 |
+| I/O            |     0.140 |       16 |       210 |            7.62 |
 | Static Power   |     0.076 |          |           |                 |
-| Total          |     0.424 |          |           |                 |
+| Total          |     0.423 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -74,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.110 |       0.098 |      0.012 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.109 |       0.097 |      0.012 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.071 |       0.058 |      0.013 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.043 |       0.042 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -144,7 +145,7 @@ Table of Contents
 +-----------------------+-----------+
 | Name                  | Power (W) |
 +-----------------------+-----------+
-| top_level             |     0.349 |
+| top_level             |     0.348 |
 |   flattening_module   |     0.001 |
 |   frame_buffer_module |     0.096 |
 |     framebuffer_1     |     0.048 |

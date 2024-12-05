@@ -36,6 +36,8 @@ async def test_a(dut):
     dut.rst_in.value = 1
     await ClockCycles(dut.pixel_clk_in,1)
     dut.rst_in.value = 0
+
+    await RisingEdge(dut.transformer_tready_out) # wait until we're ready to recieve new data
     
     dut.dda_fifo_tvalid_in.value = 1
     # dut.dda_fifo_tdata_in.value = 0b11001000_10010110_1_0001_0000111100001111 # hcount = 200, line_height = 150, wall type = 1
